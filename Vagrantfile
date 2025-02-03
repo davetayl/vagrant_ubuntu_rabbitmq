@@ -22,6 +22,7 @@ Vagrant.configure("2") do |config|
       end
       worker.vm.hostname = "worker#{i}"
       worker.vm.network "private_network", ip: "10.0.0.#{17+i}", netmask:"255.255.255.0"
+      worker.vm.network "forwarded_port", guest: 5672, host: "#{55672+i}"
       worker.vm.network "forwarded_port", guest: 15672, host: "#{15672+i}"
       worker.vm.provision "ansible" do |ansible|
         ansible.playbook = "provisioning/worker.yml"
