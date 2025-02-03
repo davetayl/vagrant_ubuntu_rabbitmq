@@ -1,0 +1,35 @@
+---
+- name: Update Ubuntu Focal and set up MySQL master
+  hosts: all
+  become: yes
+  tasks:
+    - name: Update and upgrade apt packages
+      apt:
+        update_cache: yes
+        upgrade: dist
+
+    - name: Install net-tools
+      apt:
+        name: net-tools
+        state: present
+
+    - name: Install RabbitMQ server
+      apt:
+        name: rabbitmq-server
+        state: present
+
+    - name: Install management plugin
+      rabbitmq_plugin:
+        name: rabbitmq_management
+        state: enabled
+
+    - name: Setup admin user
+      rabbitmq_user:
+        user: admin
+        password: admin
+        vhost: /
+        configure_priv: .*
+        read_priv: .*
+        write_priv: .*
+        tags: administrator
+        state: present
